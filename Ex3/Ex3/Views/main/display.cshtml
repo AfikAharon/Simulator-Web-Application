@@ -4,28 +4,35 @@
     ViewBag.Title = "One Sample Display";
 }
 
+<style>
+
+    body {
+        background-image: url("../../Map/export-map-share.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+</style>
+
+<style>
+    .dot {
+        height: 8px;
+        width: 8px;
+        color: blue;
+        border-radius: 50%;
+        display: inline-block;
+        position: center;
+        background-color: red;
+        box-shadow: 0 0 0 2px;
+        position: absolute;
+    }
+</style>
+
 <h2>display</h2>
  var lon = @Model.Lon;
  var Lat = @Model.Lat
-<img src="~/Map/export-map-share.png" style="position:absolute; width:100%;height:100%; top:0px; left:0px" />
 <head>
 
 </head>
 <body>
-    <canvas id="myCanvas" style="position:absolute; width:100%;height:100%; top:0px; left:0px ;border:10px double pink"></canvas>
-    <script>
-        var image = document.getElementById("myMap")
-        var c = document.getElementById("myCanvas");
-        var ctx = c.getContext("2d");
-        ctx.strokeStyle = "black";
-        ctx.beginPath();
-        ctx.arc(50, 100, 150, 0, 2* Math.PI);
-        ctx.stroke();
-        ctx.fillStyle = "blue";
-        ctx.fill();
-    </script>
+    <canvas class="dot"></canvas>
 </body>
-
-
-
-
