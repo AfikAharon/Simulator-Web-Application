@@ -21,5 +21,12 @@ namespace Ex3.Controllers
             var model = new OnesSampleModel(ip, port);
             return View(model);
         }
+
+        [HttpGet]
+        public ActionResult save(string ip, int port, int refresh, int seconds, string name)
+        {
+            var model = new OnesSampleModel(ip, port);
+            return View(model);
+        }
     }
 }
