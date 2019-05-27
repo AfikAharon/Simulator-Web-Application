@@ -34,7 +34,6 @@ namespace Ex3.Utils
          */
         private Client()
         {
-            tcpClient = new TcpClient();
             _currentThread = null;
         }
 
@@ -60,15 +59,13 @@ namespace Ex3.Utils
 
         public void connect(string ip, int port)
         {
-            
+            tcpClient = new TcpClient();
             tcpClient.Connect(ip, port);
         }
 
         public void disconnect()
         {
-
-            //tcpClient.Close();
-            //tcpClient.Dispose();
+            tcpClient.Close();
         }
 
         /*
