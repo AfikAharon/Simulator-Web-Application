@@ -57,54 +57,64 @@ namespace Ex3.Utils
             set { this._currentThread = value; }
         }
 
+
+        public void connect(string ip, int port)
+        {
+            
+            tcpClient.Connect(ip, port);
+        }
+
+        public void disconnect()
+        {
+
+            //tcpClient.Close();
+            //tcpClient.Dispose();
+        }
+
         /*
          * The function reads the commans given to him and then writes them, then sleeps for 2 seconds
          */
-         
-         
-        public void setLonLat(Model model, string ip, int port)
+        public double request(string reqComm)
         {
-
-            tcpClient.Connect(ip, port);
+            string req;
+            if (reqComm == "Lon")
+            {
+                req = "/position/longitude-deg";
+            } else if(reqComm == "Lat") {
+                req = "/position/latitude-deg";
+            } else
+            {
+                // no request
+                return 0;
+            }
             NetworkStream stream = tcpClient.GetStream();
             ASCIIEncoding encoding = new ASCIIEncoding();
-            int delete;
+            int sizeReq;
            
-            string lat = "/position/latitude-deg";
-            string lon = "/position/longitude-deg";
-            byte[] tempLon = encoding.GetBytes("get " + lon + "\r\n");
-            byte[] tempLat = encoding.GetBytes("get " + lat + "\r\n");
-            stream.Write(tempLon, 0, tempLon.Length);
-            delete = lon.Length;
+            byte[] concatenationReq = encoding.GetBytes("get " + req + "\r\n");
+            stream.Write(concatenationReq, 0, concatenationReq.Length);
+            sizeReq = concatenationReq.Length;
             //---read back the text---
-            model.Lon = readFromServer(stream, delete);
-            double lon1 = model.Lon;
+            double returnValue = readFromServer(stream, sizeReq);
             stream.Flush();
-
-
-            stream.Write(tempLat, 0, tempLat.Length);
-            //---read back the text---
-            delete = lat.Length;
-            model.Lat = readFromServer(stream,delete);
-            stream.Flush();
-            tcpClient.Close();
+            
+            return returnValue;
         }
-        
 
-        public double readFromServer(NetworkStream stream, int delete)
+        public double readFromServer(NetworkStream stream, int sizeReq)
         {
             byte[] bytesToRead = new byte[tcpClient.ReceiveBufferSize];
             int bytesRead = stream.Read(bytesToRead, 0, tcpClient.ReceiveBufferSize);
             string temp =Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
-            double number = extractNumber(temp, delete);
+            double number = extractNumber(temp, sizeReq);
             Console.WriteLine("Received : " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead));
             return number;
         }
 
-        public double extractNumber(string givenString, int delete)
+        public double extractNumber(string givenString, int sizeReq)
         {
             int len = givenString.Length;
-            string temp = givenString.Substring(delete + 4);
+            string temp = givenString.Substring(sizeReq + 4);
             string number = "";
             double result;
             for (int i =0; i<temp.Length; i++)

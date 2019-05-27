@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Ex3.Models;
+using Ex3.Utils;
 
 namespace Ex3.Controllers
 {
@@ -18,8 +19,12 @@ namespace Ex3.Controllers
         [HttpGet]
         public ActionResult display(string ip, int port)
         {
-            var model = new OnesSampleModel(ip, port);
-            return View(model);
+            Client client = Client.Instance;
+            client.connect(ip, port);
+            ViewBag.Lon = client.request("Lon");
+            ViewBag.Lat = client.request("Lat");
+            client.disconnect();
+            return View();
         }
 
         [HttpGet]
