@@ -2,37 +2,42 @@
 
 @{
     ViewBag.Title = "One Sample Display";
+    var yPosition = (@Model.Lat + 90) / 180 * 100;
+    var xPosition = (@Model.Lon + 180) / 360 * 100;
 }
+<h2>display</h2>
+
 
 <style>
-
     body {
         background-image: url("../../Map/export-map-share.png");
         background-size: cover;
         background-repeat: no-repeat;
     }
 </style>
-
 <style>
     .dot {
         height: 8px;
         width: 8px;
         color: blue;
         border-radius: 50%;
+        position:absolute;
         display: inline-block;
-        position: center;
         background-color: red;
         box-shadow: 0 0 0 2px;
-        position: absolute;
     }
 </style>
 
-<h2>display</h2>
- var lon = @Model.Lon;
- var Lat = @Model.Lat
 <head>
 
 </head>
 <body>
-    <canvas class="dot"></canvas>
+  
+    <span class="dot" id ="planeLocation"/>
+    <script>
+        var x = @xPosition;
+        var y = @yPosition;
+        document.getElementById("planeLocation").style.right = x.valueOf().toString() + "%";
+        document.getElementById("planeLocation").style.top = y.valueOf().toString() + "%";
+    </script>
 </body>

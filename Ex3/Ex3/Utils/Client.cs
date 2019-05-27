@@ -90,7 +90,7 @@ namespace Ex3.Utils
             tcpClient.Close();
         }
         
-
+    
         public double readFromServer(NetworkStream stream, int delete)
         {
             byte[] bytesToRead = new byte[tcpClient.ReceiveBufferSize];
