@@ -27,11 +27,27 @@
 </style>
 
 <h2>display</h2>
- ViewBag.Lon;
- ViewBag.Lat;
+
 <head>
 
 </head>
 <body>
-    <canvas class="dot"></canvas>
+    <canvas id="myCanvas"></canvas>
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = window.innerHeight;
+        var lon = (@ViewBag.Lon + 180) * ($(window).width) / 360);
+        var lat = (@ViewBag.Lat + 180) * ($(window).height) / 360);
+        ctx.beginPath();
+        ctx.arc(lon, lat, 4, 0, 2 * MATH.PI);
+        ctx.lineWidth = 2;
+        ctx.lineStyle = 'blue';
+        ctx.fillStyle = 'red';
+        ctx.fill();
+        ctx.stroke();
+    </script>
+
+
 </body>
