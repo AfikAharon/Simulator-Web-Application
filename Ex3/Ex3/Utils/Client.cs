@@ -93,7 +93,6 @@ namespace Ex3.Utils
             //---read back the text---
             double returnValue = readFromServer(stream);
             stream.Flush();
-            
             return returnValue;
         }
 

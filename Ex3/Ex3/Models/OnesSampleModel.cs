@@ -14,7 +14,6 @@ namespace Ex3.Models
         public OnesSampleModel(string ip , int port)
         {
            Client client = Client.Instance;
-           //client.setLonLat(this, ip, port);
         }
 
         public override double Lat

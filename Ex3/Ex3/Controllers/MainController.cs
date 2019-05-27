@@ -19,10 +19,11 @@ namespace Ex3.Controllers
         [HttpGet]
         public ActionResult display(string ip, int port)
         {
+
             Client client = Client.Instance;
             client.connect(ip, port);
-            ViewBag.Lon = client.request("Lon");
-            ViewBag.Lat = client.request("Lat");
+            ViewBag.lon = client.request("Lon");
+            ViewBag.lat = client.request("Lat");
             client.disconnect();
             return View();
         }
