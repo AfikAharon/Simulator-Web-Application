@@ -86,32 +86,33 @@ namespace Ex3.Utils
             }
             NetworkStream stream = tcpClient.GetStream();
             ASCIIEncoding encoding = new ASCIIEncoding();
-            int sizeReq;
+            
            
             byte[] concatenationReq = encoding.GetBytes("get " + req + "\r\n");
             stream.Write(concatenationReq, 0, concatenationReq.Length);
-            sizeReq = concatenationReq.Length;
             //---read back the text---
-            double returnValue = readFromServer(stream, sizeReq);
+            double returnValue = readFromServer(stream);
             stream.Flush();
             
             return returnValue;
         }
 
-        public double readFromServer(NetworkStream stream, int sizeReq)
+        public double readFromServer(NetworkStream stream)
         {
+
             byte[] bytesToRead = new byte[tcpClient.ReceiveBufferSize];
             int bytesRead = stream.Read(bytesToRead, 0, tcpClient.ReceiveBufferSize);
             string temp =Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
-            double number = extractNumber(temp, sizeReq);
+            double number = extractNumber(temp);
             Console.WriteLine("Received : " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead));
             return number;
         }
 
-        public double extractNumber(string givenString, int sizeReq)
+        public double extractNumber(string givenString)
         {
             int len = givenString.Length;
-            string temp = givenString.Substring(sizeReq + 4);
+            string[] splits = givenString.Split('=');
+            string temp = splits[1];
             string number = "";
             double result;
             for (int i =0; i<temp.Length; i++)
