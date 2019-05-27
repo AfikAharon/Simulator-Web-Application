@@ -2,11 +2,14 @@
 
 @{
     ViewBag.Title = "One Sample Display";
-    var yPosition = (@Model.Lat + 90) / 180 * 100;
-    var xPosition = (@Model.Lon + 180) / 360 * 100;
+
 }
 <h2>display</h2>
 
+<head>
+    meta charset= "utf-8"
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
 
 <style>
     body {
@@ -15,29 +18,25 @@
         background-repeat: no-repeat;
     }
 </style>
-<style>
-    .dot {
-        height: 8px;
-        width: 8px;
-        color: blue;
-        border-radius: 50%;
-        position:absolute;
-        display: inline-block;
-        background-color: red;
-        box-shadow: 0 0 0 2px;
-    }
-</style>
 
-<head>
 
-</head>
 <body>
-  
-    <span class="dot" id ="planeLocation"/>
+    <canvas id="myCanvas"></canvas>
     <script>
-        var x = @xPosition;
-        var y = @yPosition;
-        document.getElementById("planeLocation").style.right = x.valueOf().toString() + "%";
-        document.getElementById("planeLocation").style.top = y.valueOf().toString() + "%";
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = window.innerHeight;
+        var lon = (0 + 180) * ($(window).width() / 360);
+        var lat = (0 + 180) * ($(window).height() / 180);
+        ctx.beginPath();
+        ctx.arc(lon,lat, 4, 0, 2 * Math.PI);
+        ctx.lineWidth = 1;
+        ctx.lineStyle = 'blue';
+        ctx.fillStyle = 'red';
+        ctx.fill();
+        ctx.stroke();
+
     </script>
+
 </body>

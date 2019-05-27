@@ -19,7 +19,9 @@ namespace Ex3.Controllers
         public ActionResult display(string ip, int port)
         {
             var model = new OnesSampleModel(ip, port);
-            return View(model);
+            ViewBag.lon = 
+            ViewBag.lat = model.Lat;
+            return View();
         }
 
         [HttpGet]
