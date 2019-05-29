@@ -40,7 +40,6 @@
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
         myTimer = (function () {
-        
         ctx.beginPath();
         ctx.moveTo(lon, lat);
         lon = (@ViewBag.lon + 180) * ($(window).width() / 360)+ k;
@@ -62,6 +61,5 @@
 
     setInterval(myTimer, IntervalTime);
     myTimer();
-       
     </script>
 </body>
