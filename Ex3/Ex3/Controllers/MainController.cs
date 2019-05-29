@@ -16,10 +16,9 @@ namespace Ex3.Controllers
             return View();
         }
 
-        [HttpGet]
+        [Route("display/{ip}/{port}")]
         public ActionResult display(string ip, int port)
         {
-
             Client client = Client.Instance;
             client.connect(ip, port);
             ViewBag.lon = client.request("Lon");
@@ -27,12 +26,19 @@ namespace Ex3.Controllers
             client.disconnect();
             return View();
         }
-
-        [HttpGet]
-        public ActionResult save(string ip, int port, int refresh, int seconds, string name)
+        [Route("display/{ip}/{port}/{seconds}")]
+        public ActionResult display(string ip, int port,int seconds)
         {
-            var model = new OnesSampleModel(ip, port);
-            return View(model);
+            Client client = Client.Instance;
+            client.connect(ip, port);
+            ViewBag.lon = client.request("Lon");
+            ViewBag.lat = client.request("Lat");
+            ViewBag.sec = seconds;
+            client.disconnect();
+            return View("displaySeconds");
         }
+
+
+
     }
 }

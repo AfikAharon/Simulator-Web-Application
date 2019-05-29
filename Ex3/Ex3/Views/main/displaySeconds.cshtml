@@ -1,7 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "One Sample Display";
+    ViewBag.Title = "displaySeconds";
 }
+
+<h2>displaySeconds</h2>
 
 <style>
     body {
@@ -29,15 +31,24 @@
 <body>
     <canvas id="myCanvas"></canvas>
     <script>
-        if (@ViewBag.sec > 0) {
-            var k = 5
-        } else {
+        var lon = (@ViewBag.lon + 180) * ($(window).width() / 360);
+        var lat = (@ViewBag.lat + 180) * ($(window).height() / 360);
+        var IntervalTime = @ViewBag.sec * 1000
+        var k = 1;
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
-        var lon = (@ViewBag.lon + 180) * ($(window).width() / 360);
-        var lat = (@ViewBag.lat + 180) * ($(window).height() / 360);
+        myTimer = (function () {
+        
+        ctx.beginPath();
+        ctx.moveTo(lon, lat);
+        lon = (@ViewBag.lon + 180) * ($(window).width() / 360)+ k;
+        lat = (@ViewBag.lat + 180) * ($(window).height() / 360) + k;
+        ctx.lineTo(lon, lat);
+        ctx.lineWidth = 2;
+        ctx.lineStyle = 'red';
+        ctx.stroke();
         ctx.beginPath();
         ctx.arc(lon, lat, 4, 0, 2 * Math.PI);
         ctx.lineWidth = 2;
@@ -45,7 +56,12 @@
         ctx.fillStyle = 'red';
         ctx.fill();
         ctx.stroke();
-        }
-        
+        k += 30;
+        ctx = canvas.getContext("2d");
+        });
+
+    setInterval(myTimer, IntervalTime);
+    myTimer();
+       
     </script>
 </body>
