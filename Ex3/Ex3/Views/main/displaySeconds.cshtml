@@ -7,7 +7,7 @@
 
 <style>
     body {
-        background-image: url("../../../Map/export-map-share.png");
+        background-image: url("../../../../../Map/export-map-share.png");
         background-size: cover;
         background-repeat: no-repeat;
     }
@@ -33,7 +33,6 @@
     <script>
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
-        ctx = canvas.getContext("2d");
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
         var IntervalTime = @ViewBag.seconds * 1000
@@ -57,8 +56,11 @@
             ctx.fillStyle = 'red';
             ctx.fill();
             ctx.stroke();
+            k = k + 50;
   
+            });
         });
-    });
+        setInterval(myTimer, IntervalTime);
+        myTimer();
     </script>
 </body>
