@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml;
 using Ex3.Models;
 using Ex3.Utils;
 
@@ -19,26 +21,45 @@ namespace Ex3.Controllers
         [Route("display/{ip}/{port}")]
         public ActionResult display(string ip, int port)
         {
-            SampleValues(ip, port, true);
+            SampleValues(ip, port);
             return View();
         }
-
+    
 
         [Route("display/{ip}/{port}/{seconds}")]
         public ActionResult display(string ip, int port,int seconds)
         {
-            SampleValues(ip, port, false);
+            SampleValues(ip, port);
             ViewBag.seconds = seconds;
             return View("displaySeconds");
         }
 
 
-        public void SampleValues(string ip, int port, bool flag)
+        public string SampleValues(string ip, int port)
         {
-            FlightValues flightValues = FlightValues.Instance;
-            flightValues.SampleValues(ip, port, flag);
-            ViewBag.Lat = flightValues.Lat;
-            ViewBag.Lon = flightValues.Lon;
+            var flightValues = FlightValues.Instance;
+            flightValues.SampleValues(ip, port);
+                       
+            return ToXml(flightValues);
         }
+
+        private string ToXml(FlightValues flightValues)
+        {
+            //Initiate XML stuff
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            XmlWriter writer = XmlWriter.Create(sb, settings);
+
+            writer.WriteStartDocument();
+            writer.WriteStartElement("Values");
+
+            flightValues.ToXml(writer);
+
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+            writer.Flush();
+            return sb.ToString();
+        }
+
     }
 }

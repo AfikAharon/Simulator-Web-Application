@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Ex3.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Xml;
 
 namespace Ex3.Models
 {
@@ -45,21 +47,24 @@ namespace Ex3.Models
         }
 
 
-        public void SampleValues(string ip, int port, bool disconnectFlag)
+        public void SampleValues(string ip, int port)
         {
-            Utils.Client client = Utils.Client.Instance;
-            if (! client.IsConnected)
-            {
-                client.connect(ip, port);
-            }
+
+            Client client = Client.Instance;
+            client.connect(ip, port);
             Lon = client.request("Lon");
             Lat = client.request("Lat");
-            if (disconnectFlag)
-            {
-                client.disconnect();
-            }
+            client.disconnect();
         }
-        
+
+        public void ToXml(XmlWriter writer)
+        {
+            writer.WriteStartElement("FlightValues");
+            writer.WriteElementString("Lon", this.Lon.ToString());
+            writer.WriteElementString("Lat", this.Lat.ToString());
+            writer.WriteEndElement();
+        }
+
 
 
     }

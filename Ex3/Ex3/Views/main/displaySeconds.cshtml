@@ -7,7 +7,7 @@
 
 <style>
     body {
-        background-image: url("../../../../../Map/export-map-share.png");
+        background-image: url("../../../Map/export-map-share.png");
         background-size: cover;
         background-repeat: no-repeat;
     }
@@ -31,35 +31,34 @@
 <body>
     <canvas id="myCanvas"></canvas>
     <script>
-        var lon = (@ViewBag.lon + 180) * ($(window).width() / 360);
-        var lat = (@ViewBag.lat + 180) * ($(window).height() / 360);
-        var IntervalTime = @ViewBag.sec * 1000
-        var k = 1;
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
+        ctx = canvas.getContext("2d");
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
-        myTimer = (function () {
-        ctx.beginPath();
-        ctx.moveTo(lon, lat);
-        lon = (@ViewBag.lon + 180) * ($(window).width() / 360)+ k;
-        lat = (@ViewBag.lat + 180) * ($(window).height() / 360) + k;
-        ctx.lineTo(lon, lat);
-        ctx.lineWidth = 2;
-        ctx.lineStyle = 'red';
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(lon, lat, 4, 0, 2 * Math.PI);
-        ctx.lineWidth = 2;
-        ctx.lineStyle = 'blue';
-        ctx.fillStyle = 'red';
-        ctx.fill();
-        ctx.stroke();
-        k += 30;
-        ctx = canvas.getContext("2d");
+        var IntervalTime = @ViewBag.seconds * 1000
+        var k = 1;
+    myTimer = (function () {
+        $.post( "@Url.Action("SampleValues")").done(function (xml) {
+            var xmlDoc = $.parseXML( xml ),
+            $xml = $( xmlDoc ),
+            lon = $xml.find("Lon").text();
+            lon = (lon + 180) * ($(window).width() / 360) + k;
+            lat = $xml.find("Lat").text();
+            lat = (lat + 180) * ($(window).height() / 360) + k;
+            ctx.lineTo(lon, lat);
+            ctx.lineWidth = 2;
+            ctx.lineStyle = 'red';
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(lon, lat, 4, 0, 2 * Math.PI);
+            ctx.lineWidth = 2;
+            ctx.lineStyle = 'blue';
+            ctx.fillStyle = 'red';
+            ctx.fill();
+            ctx.stroke();
+  
         });
-
-    setInterval(myTimer, IntervalTime);
-    myTimer();
+    });
     </script>
 </body>
