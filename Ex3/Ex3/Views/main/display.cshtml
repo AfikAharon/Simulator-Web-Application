@@ -29,9 +29,6 @@
 <body>
     <canvas id="myCanvas"></canvas>
     <script>
-        if (@ViewBag.sec > 0) {
-            var k = 5
-        } else {
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
         ctx.canvas.width = window.innerWidth;
@@ -45,7 +42,5 @@
         ctx.fillStyle = 'red';
         ctx.fill();
         ctx.stroke();
-        }
-        
     </script>
 </body>
