@@ -2,25 +2,26 @@
     ViewBag.Title = "displayLine";
 }
 <style>
-
     body {
-        background-image: url("../../../../../Map/export-map-share.png");
+        background: url("../../../Map/export-map-share.png")no-repeat center center fixed;
         background-size: cover;
-        background-repeat: no-repeat;
+        height: 100%;
+        overflow: hidden;
     }
 </style>
 <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 </head>
 <body>
-
+    <div id="text1"></div>
+    <div id="text2"></div>
     <canvas id="myCanvas"></canvas>
     <script>
-        var dimension = [document.documentElement.clientWidth, document.documentElement.clientHeight];
         var canvas = document.getElementById("myCanvas");
-        canvas.width = dimension[0];
-        canvas.height = dimension[1];
         var ctx = canvas.getContext("2d");
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = window.innerHeight;
+
         var IntervalTime = @ViewBag.seconds * 1000
         var x = 0;
         var y = 0;
@@ -34,12 +35,13 @@
             var xmlDoc = $.parseXML(xml),
             $xml = $(xmlDoc),
             Lon = $xml.find("Lon").text();
-            currentLon = parseFloat(Lon) * (-1) + x;
-            //lon = (lon + 180) * ($(window).width() / 360);
+            currentLon = parseFloat(Lon) +x;
+            currentLon = (currentLon + 180) * (window.innerWidth / 360);
             Lat = $xml.find("Lat").text();
-            currentLat = parseFloat(Lat) + y;
-            //lat = (lat + 180) * ($(window).width() / 360);
-            
+            currentLat = parseFloat(Lat) +y;
+            currentLat = (currentLat + 90) * (window.innerHeight / 180);
+            document.getElementById("text1").innerText = currentLat;
+            document.getElementById("text2").innerText = currentLon;
             if (firstIterFlag) {
                 ctx.beginPath();
                 ctx.arc(currentLon, currentLat, 4, 0, 2 * Math.PI);

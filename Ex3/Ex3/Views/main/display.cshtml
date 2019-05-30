@@ -5,10 +5,11 @@
 
 <style>
     body {
-        background-image: url("../../../../../Map/export-map-share.png");
+        background: url("../../Map/export-map-share.png")no-repeat center center fixed;
         background-size: cover;
-        background-repeat: no-repeat;
-    }
+        height: 100%;
+        overflow: hidden;
+    } 
 
    
 </style>
@@ -22,8 +23,8 @@
         var ctx = canvas.getContext("2d");
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
-        var lon = (@ViewBag.Lon + 180) * ($(window).width() / 360);
-        var lat = (@ViewBag.Lat + 180) * ($(window).height() / 360);
+        var lon = (@ViewBag.Lon + 180) * (window.innerWidth / 360);
+        var lat = (@ViewBag.Lat + 90) * (window.innerHeight/ 180);
         ctx.beginPath();
         ctx.arc(lon, lat, 4, 0, 2 * Math.PI);
         ctx.lineWidth = 2;
