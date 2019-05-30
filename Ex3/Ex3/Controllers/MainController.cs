@@ -25,7 +25,7 @@ namespace Ex3.Controllers
         {
             SampleFlightValues(ip, port, false);
             ViewBag.seconds = seconds;
-            return View("displaySeconds");
+            return View("displayLine");
         }
 
 
