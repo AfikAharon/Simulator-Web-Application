@@ -1,63 +1,66 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "displaySeconds";
 }
-
-<h2>displaySeconds</h2>
-
 <style>
+
     body {
         background-image: url("../../../../../Map/export-map-share.png");
         background-size: cover;
         background-repeat: no-repeat;
     }
-
-    .dot {
-        height: 8px;
-        width: 8px;
-        color: blue;
-        border-radius: 50%;
-        display: inline-block;
-        position: center;
-        background-color: red;
-        box-shadow: 0 0 0 2px;
-        position: absolute;
-    }
 </style>
-<h2>display</h2>
 <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 </head>
 <body>
+
     <canvas id="myCanvas"></canvas>
     <script>
+        var dimension = [document.documentElement.clientWidth, document.documentElement.clientHeight];
         var canvas = document.getElementById("myCanvas");
+        canvas.width = dimension[0];
+        canvas.height = dimension[1];
         var ctx = canvas.getContext("2d");
-        ctx.canvas.width = window.innerWidth;
-        ctx.canvas.height = window.innerHeight;
         var IntervalTime = @ViewBag.seconds * 1000
-        var k = 1;
+        var x = 0;
+        var y = 0;
+        var firstIterFlag = true;
+        var prevLon;
+        var prevLat;
+        var currentLon;
+        var currentLat;
     myTimer = (function () {
         $.post( "@Url.Action("GetValues")").done(function (xml) {
-            var xmlDoc = $.parseXML( xml ),
-            $xml = $( xmlDoc ),
-            lon = $xml.find("Lon").text(),
-            //lon = (lon + 180) * ($(window).width() / 360) + k;
-            lat = $xml.find("Lat").text();
-            //lat = (lat + 180) * ($(window).height() / 360) + k;
-            ctx.lineTo(lon, lat);
-            ctx.lineWidth = 2;
-            ctx.lineStyle = 'red';
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.arc(lon, lat, 4, 0, 2 * Math.PI);
-            ctx.lineWidth = 2;
-            ctx.lineStyle = 'blue';
-            ctx.fillStyle = 'red';
-            ctx.fill();
-            ctx.stroke();
-            k = k + 50;
-  
+            var xmlDoc = $.parseXML(xml),
+            $xml = $(xmlDoc),
+            Lon = $xml.find("Lon").text();
+            currentLon = parseFloat(Lon) * (-1) + x;
+            //lon = (lon + 180) * ($(window).width() / 360);
+            Lat = $xml.find("Lat").text();
+            currentLat = parseFloat(Lat) + y;
+            //lat = (lat + 180) * ($(window).width() / 360);
+            
+            if (firstIterFlag) {
+                ctx.beginPath();
+                ctx.arc(currentLon, currentLat, 4, 0, 2 * Math.PI);
+                ctx.lineWidth = 2;
+                ctx.lineStyle = 'blue';
+                ctx.fillStyle = 'red';
+                ctx.fill();
+                ctx.stroke();
+                firstIterFlag = false;
+            } else {
+                ctx.beginPath();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = 'red';
+                ctx.moveTo(prevLon, prevLat);
+                ctx.lineTo(currentLon, currentLat);
+                ctx.stroke();
+            }
+            prevLat = currentLat;
+            prevLon = currentLon;
+            x = x + 50;
+            y = y + 10;
             });
         });
         setInterval(myTimer, IntervalTime);

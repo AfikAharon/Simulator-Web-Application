@@ -41,6 +41,8 @@ namespace Ex3.Controllers
             flightValues.ip = ip;
             flightValues.Port = port;
             flightValues.SampleValues(disconnectFlag);
+            ViewBag.Lat = flightValues.Lat;
+            ViewBag.Lon = flightValues.Lon;
         }
 
         [HttpPost]
