@@ -38,13 +38,13 @@
         var IntervalTime = @ViewBag.seconds * 1000
         var k = 1;
     myTimer = (function () {
-        $.post( "@Url.Action("SampleValues")").done(function (xml) {
+        $.post( "@Url.Action("GetValues")").done(function (xml) {
             var xmlDoc = $.parseXML( xml ),
             $xml = $( xmlDoc ),
-            lon = $xml.find("Lon").text();
-            lon = (lon + 180) * ($(window).width() / 360) + k;
+            lon = $xml.find("Lon").text(),
+            //lon = (lon + 180) * ($(window).width() / 360) + k;
             lat = $xml.find("Lat").text();
-            lat = (lat + 180) * ($(window).height() / 360) + k;
+            //lat = (lat + 180) * ($(window).height() / 360) + k;
             ctx.lineTo(lon, lat);
             ctx.lineWidth = 2;
             ctx.lineStyle = 'red';

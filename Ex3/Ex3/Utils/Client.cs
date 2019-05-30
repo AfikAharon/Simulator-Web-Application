@@ -14,6 +14,7 @@ namespace Ex3.Utils
     {
         private TcpClient tcpClient;
         private volatile Thread _currentThread;
+        private static Mutex mut;
 
         #region Singleton
         private static Client c_Instance = null;
@@ -24,6 +25,7 @@ namespace Ex3.Utils
                 if (c_Instance == null)
                 {
                     c_Instance = new Client();
+                    mut = new Mutex();
                 }
                 return c_Instance;
             }
@@ -35,6 +37,7 @@ namespace Ex3.Utils
         private Client()
         {
             _currentThread = null;
+            tcpClient = new TcpClient();
         }
 
         /*
@@ -45,7 +48,7 @@ namespace Ex3.Utils
             get { return tcpClient.Connected; }
         }
 
-   
+
 
         /*
          * GetCurrentThread property, returns the value , and sets value
@@ -77,22 +80,24 @@ namespace Ex3.Utils
             if (reqComm == "Lon")
             {
                 req = "/position/longitude-deg";
-            } else if(reqComm == "Lat") {
+            } else if (reqComm == "Lat") {
                 req = "/position/latitude-deg";
             } else
             {
                 // no request
                 return 0;
             }
+
             NetworkStream stream = tcpClient.GetStream();
             ASCIIEncoding encoding = new ASCIIEncoding();
-            
-           
+
+            Lock();
             byte[] concatenationReq = encoding.GetBytes("get " + req + "\r\n");
             stream.Write(concatenationReq, 0, concatenationReq.Length);
             //---read back the text---
             double returnValue = readFromServer(stream);
             stream.Flush();
+            Unlock();
             return returnValue;
         }
 
@@ -101,7 +106,7 @@ namespace Ex3.Utils
 
             byte[] bytesToRead = new byte[tcpClient.ReceiveBufferSize];
             int bytesRead = stream.Read(bytesToRead, 0, tcpClient.ReceiveBufferSize);
-            string temp =Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
+            string temp = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
             double number = extractNumber(temp);
             Console.WriteLine("Received : " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead));
             return number;
@@ -114,16 +119,26 @@ namespace Ex3.Utils
             string temp = splits[1];
             string number = "";
             double result;
-            for (int i =0; i<temp.Length; i++)
+            for (int i = 0; i < temp.Length; i++)
             {
                 char c = temp[i];
-                if ((c >= '0' && c <= '9') || c == '-'|| c == '.')
+                if ((c >= '0' && c <= '9') || c == '-' || c == '.')
                 {
                     number += c;
                 }
             }
             result = Convert.ToDouble(number);
             return result;
+        }
+
+        public void Lock() {
+            mut.WaitOne();
+
+        }
+
+        public void Unlock()
+        {
+            mut.ReleaseMutex();
         }
     }
 }

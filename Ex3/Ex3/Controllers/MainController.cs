@@ -21,31 +21,40 @@ namespace Ex3.Controllers
         [Route("display/{ip}/{port}")]
         public ActionResult display(string ip, int port)
         {
-            SampleValues(ip, port);
+            SampleFlightValues(ip, port, true);
             return View();
         }
-    
+
 
         [Route("display/{ip}/{port}/{seconds}")]
-        public ActionResult display(string ip, int port,int seconds)
+        public ActionResult display(string ip, int port, int seconds)
         {
-            SampleValues(ip, port);
+            SampleFlightValues(ip, port, false);
             ViewBag.seconds = seconds;
             return View("displaySeconds");
         }
 
 
-        public string SampleValues(string ip, int port)
+        public void SampleFlightValues(string ip, int port, bool disconnectFlag)
         {
             var flightValues = FlightValues.Instance;
-            flightValues.SampleValues(ip, port);
-                       
+            flightValues.ip = ip;
+            flightValues.Port = port;
+            flightValues.SampleValues(disconnectFlag);
+        }
+
+        [HttpPost]
+        public string GetValues()
+        {
+            var flightValues = FlightValues.Instance;
+            flightValues.SampleValues(false);
             return ToXml(flightValues);
         }
 
         private string ToXml(FlightValues flightValues)
         {
             //Initiate XML stuff
+            flightValues.SampleValues(false);
             StringBuilder sb = new StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings();
             XmlWriter writer = XmlWriter.Create(sb, settings);

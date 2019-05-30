@@ -11,6 +11,8 @@ namespace Ex3.Models
     {
         private double _Lat;
         private double _Lon;
+        private string _ip;
+        private int _Port;
 
 
 
@@ -46,15 +48,31 @@ namespace Ex3.Models
             set { _Lon = value; }
         }
 
+        public string ip
+        {
+            get { return ip; }
+            set { _ip = value; }
+        }
 
-        public void SampleValues(string ip, int port)
+        public int Port
+        {
+            get { return _Port; }
+            set { _Port = value; }
+        }
+
+
+        public void SampleValues(bool disconnectFlag)
         {
 
             Client client = Client.Instance;
-            client.connect(ip, port);
+            if (! client.IsConnected || disconnectFlag)
+            client.connect(_ip, _Port);
             Lon = client.request("Lon");
             Lat = client.request("Lat");
-            client.disconnect();
+            if (disconnectFlag)
+            {
+                client.disconnect();
+            }
         }
 
         public void ToXml(XmlWriter writer)
