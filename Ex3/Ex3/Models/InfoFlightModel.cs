@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace Ex3.Models
 {
-    public class FlightValues
+    public class InfoFlightModel
     {
         private double _Lat;
         private double _Lon;
@@ -17,20 +17,20 @@ namespace Ex3.Models
 
 
         #region Singleton
-        private static FlightValues _flightValues = null;
-        public static FlightValues Instance
+        private static InfoFlightModel _flightValues = null;
+        public static InfoFlightModel Instance
         {
             get
             {
                 if (_flightValues == null)
                 {
-                    _flightValues = new FlightValues();
+                    _flightValues = new InfoFlightModel();
                 }
                 return _flightValues;
             }
         }
         #endregion
-        private FlightValues()
+        private InfoFlightModel()
         {
             _Lon = 0;
             _Lat = 0;

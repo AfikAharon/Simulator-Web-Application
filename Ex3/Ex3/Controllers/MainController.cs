@@ -12,22 +12,16 @@ namespace Ex3.Controllers
 {
     public class MainController : Controller
     {
-        // GET: Main
-        public ActionResult Index()
-        {
-            return View();
-        }
 
-        [Route("display/{ip}/{port}")]
-        public ActionResult display(string ip, int port)
+        [HttpGet]
+        public ActionResult display(string ip="127.0.0.1", int port=5400)
         {
             SampleFlightValues(ip, port, true);
             return View();
         }
 
-
-        [Route("display/{ip}/{port}/{seconds}")]
-        public ActionResult display(string ip, int port, int seconds)
+        [HttpGet]
+        public ActionResult displayLine(string ip, int port, int seconds)
         {
             SampleFlightValues(ip, port, false);
             ViewBag.seconds = seconds;
@@ -37,26 +31,25 @@ namespace Ex3.Controllers
 
         public void SampleFlightValues(string ip, int port, bool disconnectFlag)
         {
-            var flightValues = FlightValues.Instance;
-            flightValues.ip = ip;
-            flightValues.Port = port;
-            flightValues.SampleValues(disconnectFlag);
-            ViewBag.Lat = flightValues.Lat;
-            ViewBag.Lon = flightValues.Lon;
+            var infoFlightModel = InfoFlightModel.Instance;
+            infoFlightModel.ip = ip;
+            infoFlightModel.Port = port;
+            infoFlightModel.SampleValues(disconnectFlag);
+            ViewBag.Lat = infoFlightModel.Lat;
+            ViewBag.Lon = infoFlightModel.Lon;
         }
 
         [HttpPost]
         public string GetValues()
         {
-            var flightValues = FlightValues.Instance;
-            flightValues.SampleValues(false);
-            return ToXml(flightValues);
+            var infoFlightModel = InfoFlightModel.Instance;
+            infoFlightModel.SampleValues(false);
+            return ToXml(infoFlightModel);
         }
 
-        private string ToXml(FlightValues flightValues)
+        private string ToXml(InfoFlightModel flightValues)
         {
             //Initiate XML stuff
-            flightValues.SampleValues(false);
             StringBuilder sb = new StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings();
             XmlWriter writer = XmlWriter.Create(sb, settings);
