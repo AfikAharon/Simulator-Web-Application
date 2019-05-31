@@ -58,7 +58,29 @@ namespace Ex3.Controllers
             return ToXml(infoFlightModel);
         }
 
-        
+        [HttpGet]
+        public ActionResult DisplayFromFile(string FileName, int seconds)
+        {
+            var infoFlightFileModel = infoFlightFileModel.Instance;
+            infoFlightFileModel.Read(FileName);
+            ViewBag.seconds = seconds;
+            return View("FlightDetailsFile");
+            
+        }
+
+        [HttpPost]
+        public string GetValuesFromFile(string[] data)
+        {
+            var infoFlightFileModel = infoFlightFileModel.Instance;
+            int counter = infoFlightFileModel.Counter;
+            string[] splitParmas = data[counter].Split(',');
+            infoFlightFileModel.Lon = splitParmas[0];
+            infoFlightFileModel.Lat = splitParmas[1];
+            infoFlightFileModel.Throttle = splitParmas[2];
+            infoFlightFileModel.Rudder = splitParmas[3];
+            return ToXml(infoFlightFileModel);
+
+        }
 
         public void SampleFlightDeatils(string ip, int port, bool disconnectFlag)
         {
