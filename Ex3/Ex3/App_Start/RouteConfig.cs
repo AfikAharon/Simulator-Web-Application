@@ -38,6 +38,12 @@ namespace Ex3
                url: "save/{ip}/{port}/{seconds}/{timer}/{fileName}",
                defaults: new { controller = "Main", action = "SaveFlightDeatils" }
            );
+
+            routes.MapRoute(
+               name: "displayFromFile",
+               url: "display/{fileName}/{seconds}",
+               defaults: new { controller = "Main", action = "DisplayFromFile" }
+           );
         }
     }
 }
