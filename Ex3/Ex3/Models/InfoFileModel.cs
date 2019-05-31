@@ -57,7 +57,7 @@ namespace Ex3.Models
 
         public void Read(string fileName)
         {
-            // Read the file and init
+            _information = System.IO.File.ReadAllLines(fileName);
             Counter = 0;
         }
 
@@ -66,7 +66,7 @@ namespace Ex3.Models
         {
             if(Counter > Size - 1)
             {
-                /// throw Exception
+                //throw new ArgumentOutOfRangeException("out of reach");
             }
             string retValue = Information[Counter];
             Counter++;
