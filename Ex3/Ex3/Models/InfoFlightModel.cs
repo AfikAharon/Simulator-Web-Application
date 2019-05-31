@@ -1,6 +1,7 @@
 ﻿using Ex3.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Xml;
@@ -107,7 +108,15 @@ namespace Ex3.Models
             writer.WriteEndElement();
         }
 
+        public const string SCENARIO_FILE = "~/App_Data/{0}.txt";
 
-
+        public void SaveToFile(string fileName)
+        {
+            string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, fileName));
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(path, false))
+            {
+                file.WriteLine(Lon.ToString() + "," + Lat.ToString() + ","  + Throttle.ToString() +","+ Rudder.ToString() );
+            }
+        }
     }
 }

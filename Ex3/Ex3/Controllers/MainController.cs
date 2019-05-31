@@ -26,16 +26,39 @@ namespace Ex3.Controllers
             ViewBag.seconds = seconds;
             return View("displayLine");
         }
+        // Interval function for cshtml DisplayLine
+        [HttpPost]
+        public string GetValues()
+        {
+            var infoFlightModel = InfoFlightModel.Instance;
+            infoFlightModel.SampleValues(false);
+            return ToXml(infoFlightModel);
+        }
 
         [HttpGet]
         public ActionResult SaveFlightDeatils(string ip, int port, int seconds, int timer, string fileName)
         {
             SampleFlightDeatils(ip, port, false);
+            InfoFlightModel.Instance.SaveToFile(fileName);
             ViewBag.seconds = seconds;
             ViewBag.timer = timer;
+            ViewBag.FileName = fileName;
             return View("SaveFlightDeatils");
         }
+        
 
+        // Interval function for cshtml SaveFlightDeatils
+        [HttpPost]
+        public string SaveValues(string param)
+        {
+            var infoFlightModel = InfoFlightModel.Instance;
+            string[] splitParmas = param.Split(',');
+            infoFlightModel.SaveToFile(splitParmas[0]);
+            infoFlightModel.SampleValues(false);
+            return ToXml(infoFlightModel);
+        }
+
+        
 
         public void SampleFlightDeatils(string ip, int port, bool disconnectFlag)
         {
@@ -47,13 +70,6 @@ namespace Ex3.Controllers
             ViewBag.Lon = infoFlightModel.Lon;
         }
 
-        [HttpPost]
-        public string GetValues()
-        {
-            var infoFlightModel = InfoFlightModel.Instance;
-            infoFlightModel.SampleValues(false);
-            return ToXml(infoFlightModel);
-        }
 
         private string ToXml(InfoFlightModel flightValues)
         {
