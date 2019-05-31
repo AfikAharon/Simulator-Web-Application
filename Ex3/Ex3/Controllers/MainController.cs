@@ -61,16 +61,25 @@ namespace Ex3.Controllers
         [HttpGet]
         public ActionResult DisplayFromFile(string FileName, int seconds)
         {
-            var infoFlightFileModel = infoFlightFileModel.Instance;
-            infoFlightFileModel.Read(FileName);
+            var infoFileModel = InfoFileModel.Instance;
+            infoFileModel.Read(FileName);
+            string values = infoFileModel.Get();
+            // Do a split , cast and inseret to infoFileModel
             ViewBag.seconds = seconds;
             return View("FlightDetailsFile");
             
         }
 
         [HttpPost]
-        public string GetValuesFromFile(string[] data)
+        public string GetValuesFromFile(string param)
         {
+            string[] splitParmas = param.Split(',');
+            var infoFileModel = InfoFileModel.Instance;
+            string values = infoFileModel.Get();
+            // Do a split , cast and inseret to infoFileModel
+
+
+            /*
             var infoFlightFileModel = infoFlightFileModel.Instance;
             int counter = infoFlightFileModel.Counter;
             string[] splitParmas = data[counter].Split(',');
@@ -78,7 +87,10 @@ namespace Ex3.Controllers
             infoFlightFileModel.Lat = splitParmas[1];
             infoFlightFileModel.Throttle = splitParmas[2];
             infoFlightFileModel.Rudder = splitParmas[3];
-            return ToXml(infoFlightFileModel);
+            */
+            //return ToXml(infoFlightFileModel);
+            return null;
+            // change to XNL
 
         }
 
