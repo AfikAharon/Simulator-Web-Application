@@ -6,7 +6,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using Ex3.Models;
-using Ex3.Utils;
 
 namespace Ex3.Controllers
 {
@@ -14,22 +13,31 @@ namespace Ex3.Controllers
     {
 
         [HttpGet]
-        public ActionResult display(string ip="127.0.0.1", int port=5400)
+        public ActionResult Display(string ip="127.0.0.1", int port=5400)
         {
-            SampleFlightValues(ip, port, true);
+            SampleFlightDeatils(ip, port, true);
             return View();
         }
 
         [HttpGet]
-        public ActionResult displayLine(string ip, int port, int seconds)
+        public ActionResult DisplayLine(string ip, int port, int seconds)
         {
-            SampleFlightValues(ip, port, false);
+            SampleFlightDeatils(ip, port, false);
             ViewBag.seconds = seconds;
             return View("displayLine");
         }
 
+        [HttpGet]
+        public ActionResult SaveFlightDeatils(string ip, int port, int seconds, int timer, string fileName)
+        {
+            SampleFlightDeatils(ip, port, false);
+            ViewBag.seconds = seconds;
+            ViewBag.timer = timer;
+            return View("SaveFlightDeatils");
+        }
 
-        public void SampleFlightValues(string ip, int port, bool disconnectFlag)
+
+        public void SampleFlightDeatils(string ip, int port, bool disconnectFlag)
         {
             var infoFlightModel = InfoFlightModel.Instance;
             infoFlightModel.ip = ip;
@@ -64,6 +72,5 @@ namespace Ex3.Controllers
             writer.Flush();
             return sb.ToString();
         }
-
     }
 }

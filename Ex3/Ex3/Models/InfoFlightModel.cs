@@ -13,6 +13,8 @@ namespace Ex3.Models
         private double _Lon;
         private string _ip;
         private int _Port;
+        private double _throttle;
+        private double _rudder;
 
 
 
@@ -32,8 +34,12 @@ namespace Ex3.Models
         #endregion
         private InfoFlightModel()
         {
-            _Lon = 0;
             _Lat = 0;
+            _Lon = 0;
+            _ip = "127.0.0.1";
+            _Port = 5400;
+            _throttle = 0;
+            _rudder = 0;
         }
 
         public double Lat
@@ -46,6 +52,18 @@ namespace Ex3.Models
         {
             get { return _Lon; }
             set { _Lon = value; }
+        }
+
+        public double Throttle
+        {
+            get { return _throttle; }
+            set { _throttle = value; }
+        }
+
+        public double Rudder
+        {
+            get { return _rudder; }
+            set { _rudder = value; }
         }
 
         public string ip
@@ -66,9 +84,13 @@ namespace Ex3.Models
 
             Client client = Client.Instance;
             if (! client.IsConnected || disconnectFlag)
-            client.connect(_ip, _Port);
-            Lon = client.request("Lon");
-            Lat = client.request("Lat");
+            {
+                client.connect(_ip, _Port);
+            }
+            Lon = client.request("/position/longitude-deg");
+            Lat = client.request("/position/latitude-deg");
+            Rudder = client.request("/controls/flight/rudder");
+            Throttle = client.request("/controls/engines/current-engine/throttle");
             if (disconnectFlag)
             {
                 client.disconnect();
@@ -80,6 +102,8 @@ namespace Ex3.Models
             writer.WriteStartElement("FlightValues");
             writer.WriteElementString("Lon", this.Lon.ToString());
             writer.WriteElementString("Lat", this.Lat.ToString());
+            writer.WriteElementString("Rudder", this._rudder.ToString());
+            writer.WriteElementString("Throttle", this._throttle.ToString());
             writer.WriteEndElement();
         }
 

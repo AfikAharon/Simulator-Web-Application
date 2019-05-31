@@ -76,23 +76,11 @@ namespace Ex3.Utils
          */
         public double request(string reqComm)
         {
-            string req;
-            if (reqComm == "Lon")
-            {
-                req = "/position/longitude-deg";
-            } else if (reqComm == "Lat") {
-                req = "/position/latitude-deg";
-            } else
-            {
-                // no request
-                return 0;
-            }
-
             NetworkStream stream = tcpClient.GetStream();
             ASCIIEncoding encoding = new ASCIIEncoding();
 
             Lock();
-            byte[] concatenationReq = encoding.GetBytes("get " + req + "\r\n");
+            byte[] concatenationReq = encoding.GetBytes("get " + reqComm + "\r\n");
             stream.Write(concatenationReq, 0, concatenationReq.Length);
             //---read back the text---
             double returnValue = readFromServer(stream);
