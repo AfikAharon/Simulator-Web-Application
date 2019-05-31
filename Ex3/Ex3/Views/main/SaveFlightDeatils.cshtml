@@ -5,7 +5,7 @@
 
 <style>
     body {
-        background: url("../../../Map/export-map-share.png")no-repeat center center fixed;
+        background: url("../../../../../Map/export-map-share.png")no-repeat center center fixed;
         background-size: cover;
         height: 100%;
         overflow: hidden;
@@ -15,12 +15,8 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 </head>
 <body>
-    <div id="text1"></div>
-    <div id="text2"></div>
     <canvas id="myCanvas"></canvas>
-
     <script>
-
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
         ctx.canvas.width = window.innerWidth;
@@ -31,8 +27,9 @@
         var prevLat;
         var currentLon;
         var currentLat;
+        
     myTimer = (function () {
-        $.post( "@Url.Action("GetValues")").done(function (xml) {
+        $.post("@Url.Action("SaveValues")").done(function (xml) {
             var xmlDoc = $.parseXML(xml),
             $xml = $(xmlDoc),
             Lon = $xml.find("Lon").text();
@@ -41,8 +38,6 @@
             Lat = $xml.find("Lat").text();
             currentLat = parseFloat(Lat);
             currentLat = (currentLat + 90) * (window.innerHeight / 180);
-            document.getElementById("text1").innerText = currentLat;
-            document.getElementById("text2").innerText = currentLon;
             // check if it's the first iteration
             if (firstIterFlag) {
                 ctx.beginPath();
@@ -52,7 +47,6 @@
                 ctx.fillStyle = 'red';
                 ctx.fill();
                 ctx.stroke();
-                //DrawCircle(ctx, currentLon, currentLat);
                 firstIterFlag = false;
             } else {
                 ctx.beginPath();
@@ -67,7 +61,10 @@
             });
         });
         setInterval(myTimer, IntervalTime);
-        myTimer();
+        function stopInterval(intervalTimer) {
+            clearInterval(intervalTimer);
+        };
+        setTimeout(setInterval(myTimer), @ViewBag.timer *1000)
     </script>
 </body>
 

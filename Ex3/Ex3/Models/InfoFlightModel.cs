@@ -16,7 +16,7 @@ namespace Ex3.Models
         private int _Port;
         private double _throttle;
         private double _rudder;
-
+        private string _fileName;
 
 
         #region Singleton
@@ -41,6 +41,7 @@ namespace Ex3.Models
             _Port = 5400;
             _throttle = 0;
             _rudder = 0;
+            _fileName = null;
         }
 
         public double Lat
@@ -79,6 +80,12 @@ namespace Ex3.Models
             set { _Port = value; }
         }
 
+        public string FileName
+        {
+            get { return _fileName; }
+            set { _fileName = value; }
+        }
+
 
         public void SampleValues(bool disconnectFlag)
         {
@@ -110,13 +117,17 @@ namespace Ex3.Models
 
         public const string SCENARIO_FILE = "~/App_Data/{0}.txt";
 
-        public void SaveToFile(string fileName)
+        public void SaveToFile()
         {
-            string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, fileName));
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(path, false))
+            if (FileName != null)
             {
-                file.WriteLine(Lon.ToString() + "," + Lat.ToString() + ","  + Throttle.ToString() +","+ Rudder.ToString() );
+                string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, FileName));
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(path, false))
+                {
+                    file.WriteLine(Lon.ToString() + "," + Lat.ToString() + "," + Throttle.ToString() + "," + Rudder.ToString());
+                }
             }
+            
         }
     }
 }

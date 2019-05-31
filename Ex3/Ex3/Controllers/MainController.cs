@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -13,8 +14,17 @@ namespace Ex3.Controllers
     {
 
         [HttpGet]
-        public ActionResult Display(string ip="127.0.0.1", int port=5400)
+        public ActionResult Display(string ip, int port)
         {
+            IPAddress adress;
+            try
+            {
+                adress = IPAddress.Parse(ip);
+            }
+            catch
+            {
+                return RedirectToAction("DisplayFromFile", new { FileName = ip, seconds = port });
+            }
             SampleFlightDeatils(ip, port, true);
             return View();
         }
@@ -39,22 +49,21 @@ namespace Ex3.Controllers
         public ActionResult SaveFlightDeatils(string ip, int port, int seconds, int timer, string fileName)
         {
             SampleFlightDeatils(ip, port, false);
-            InfoFlightModel.Instance.SaveToFile(fileName);
+            InfoFlightModel infoFlightModel = InfoFlightModel.Instance;
+            infoFlightModel.FileName = fileName;
             ViewBag.seconds = seconds;
             ViewBag.timer = timer;
-            ViewBag.FileName = fileName;
             return View("SaveFlightDeatils");
         }
         
 
         // Interval function for cshtml SaveFlightDeatils
         [HttpPost]
-        public string SaveValues(string param)
+        public string SaveValues()
         {
             var infoFlightModel = InfoFlightModel.Instance;
-            string[] splitParmas = param.Split(',');
-            infoFlightModel.SaveToFile(splitParmas[0]);
             infoFlightModel.SampleValues(false);
+            infoFlightModel.SaveToFile();
             return ToXml(infoFlightModel);
         }
 
@@ -72,14 +81,18 @@ namespace Ex3.Controllers
         public string GetValuesFromFile(string param)
         {
             var infoFileModel = InfoFileModel.Instance;
-            string values = infoFileModel.Get();
-            string[] splitParmas = values.Split(',');
-            // Do a split , cast and inseret to infoFileModel
             InfoFlightModel infoFlightModel = InfoFlightModel.Instance;
-            infoFlightModel.Lon = Convert.ToDouble(splitParmas[0]);
-            infoFlightModel.Lat = Convert.ToDouble(splitParmas[1]);
-            infoFlightModel.Throttle = Convert.ToDouble(splitParmas[2]);
-            infoFlightModel.Rudder = Convert.ToDouble(splitParmas[3]);
+            string[] splitParams;
+            string values = infoFileModel.Get();
+            if (values != null)
+            {
+                splitParams = values.Split(',');
+                infoFlightModel.Lon = Convert.ToDouble(splitParams[0]);
+                infoFlightModel.Lat = Convert.ToDouble(splitParams[1]);
+                infoFlightModel.Throttle = Convert.ToDouble(splitParams[2]);
+                infoFlightModel.Rudder = Convert.ToDouble(splitParams[3]);
+
+            }
             return ToXml(infoFlightModel);
             // change to XNL
 
