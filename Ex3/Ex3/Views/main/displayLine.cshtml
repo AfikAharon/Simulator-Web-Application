@@ -26,7 +26,7 @@
             var prevLon = reruenValues.Lon;
             var prevLat = reruenValues.Lat;
             myTimer = (function myTimer() {
-            $.post("@Url.Action("SaveValues")").done(function (xml) {
+            $.post("@Url.Action("GetValues")").done(function (xml) {
                 reruenValues = drawCircleAndLine(prevLon, prevLat, false, ctx, xml);
                 prevLon = reruenValues.Lon;
                 prevLat = reruenValues.Lat;
