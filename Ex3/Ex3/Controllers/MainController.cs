@@ -57,8 +57,8 @@ namespace Ex3.Controllers
         public ActionResult SaveFlightDeatils(string ip, int port, int seconds, int timer, string fileName)
         {
             SampleFlightDeatils(ip, port, false);
-            InfoFileModel infoFlightModel = InfoFileModel.Instance;
-            infoFlightModel.FileName = fileName;
+            InfoFileModel infoFileModel = InfoFileModel.Instance;
+            infoFileModel.FileName = fileName;
             ViewBag.seconds = seconds;
             ViewBag.timer = timer;
             return View("SaveFlightDeatils");
@@ -79,26 +79,27 @@ namespace Ex3.Controllers
         public ActionResult DisplayFromFile(string FileName, int seconds)
         {
             var infoFileModel = InfoFileModel.Instance;
-            infoFileModel.Read(FileName);
+            infoFileModel.FileName = FileName;
+            infoFileModel.Read();
             ViewBag.seconds = seconds;
             return View("FlightDetailsFile");
             
         }
 
         [HttpPost]
-        public string GetValuesFromFile(string param)
+        public string GetValuesFromFile()
         {
             var infoFileModel = InfoFileModel.Instance;
             InfoFlightModel infoFlightModel = InfoFlightModel.Instance;
-            string[] splitParams;
+            string[] splitFlightDeatils;
             string values = infoFileModel.Get();
             if (values != null)
             {
-                splitParams = values.Split(',');
-                infoFlightModel.Lon = Convert.ToDouble(splitParams[0]);
-                infoFlightModel.Lat = Convert.ToDouble(splitParams[1]);
-                infoFlightModel.Throttle = Convert.ToDouble(splitParams[2]);
-                infoFlightModel.Rudder = Convert.ToDouble(splitParams[3]);
+                splitFlightDeatils = values.Split(',');
+                infoFlightModel.Lon = Convert.ToDouble(splitFlightDeatils[0]);
+                infoFlightModel.Lat = Convert.ToDouble(splitFlightDeatils[1]);
+                infoFlightModel.Throttle = Convert.ToDouble(splitFlightDeatils[2]);
+                infoFlightModel.Rudder = Convert.ToDouble(splitFlightDeatils[3]);
 
             }
             return ToXml(infoFlightModel);
