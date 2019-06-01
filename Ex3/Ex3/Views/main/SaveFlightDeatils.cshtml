@@ -23,7 +23,7 @@
             ctx.canvas.width = window.innerWidth;
             ctx.canvas.height = window.innerHeight;
             var IntervalTime =  1000 * @ViewBag.seconds;
-            var reruenValues = drawCircleAndLine(@ViewBag.Lon, @ViewBag.Lat, true, ctx, xml);
+            var reruenValues = drawCircleAndLine(@ViewBag.Lon, @ViewBag.Lat, true, ctx, null);
             var prevLon = reruenValues.Lon;
             var prevLat = reruenValues.Lat;
             myTimer = (function myTimer() {

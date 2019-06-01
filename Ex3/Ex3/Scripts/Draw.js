@@ -17,7 +17,13 @@ function drawLine(ctx, startX,startY, endX, endY) {
     ctx.stroke();
 }
 
-function drawCircleAndLine(prevLon, prevLat, firstIterFlag, ctx,xml) {
+function drawCircleAndLine(prevLon, prevLat, firstIterFlag, ctx, xml) {
+    if (firstIterFlag) {
+        var lon = (prevLon + 180) * (window.innerWidth / 360);
+        var lat = (prevLat + 90) * (window.innerHeight / 180);
+        drawCircle(ctx, lon, lat);
+        return { Lon: lon, Lat: lat }
+    }
     var xmlDoc = $.parseXML(xml),
     $xml = $(xmlDoc),
     xmlLon = $xml.find("Lon").text();
@@ -29,8 +35,7 @@ function drawCircleAndLine(prevLon, prevLat, firstIterFlag, ctx,xml) {
     // check if it's the first iteration
     if (firstIterFlag) {
         drawCircle(ctx, lon, lat);
-    } else {
-        drawLine(ctx, prevLon, prevLat, lon, lat);
     }
+    drawLine(ctx, prevLon, prevLat, lon, lat);
     return {Lon: lon, Lat:lat}
 }
