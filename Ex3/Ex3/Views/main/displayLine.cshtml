@@ -13,58 +13,27 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 </head>
 <body>
-    <div id="text1"></div>
-    <div id="text2"></div>
     <canvas id="myCanvas"></canvas>
 
     <script>
-
-        var canvas = document.getElementById("myCanvas");
-        var ctx = canvas.getContext("2d");
-        ctx.canvas.width = window.innerWidth;
-        ctx.canvas.height = window.innerHeight;
-        var IntervalTime =  1000 * @ViewBag.seconds;
-        var firstIterFlag = true;
-        var prevLon;
-        var prevLat;
-        var currentLon;
-        var currentLat;
-    myTimer = (function () {
-        $.post( "@Url.Action("GetValues")").done(function (xml) {
-            var xmlDoc = $.parseXML(xml),
-            $xml = $(xmlDoc),
-            Lon = $xml.find("Lon").text();
-            currentLon = parseFloat(Lon);
-            currentLon = (currentLon + 180) * (window.innerWidth / 360);
-            Lat = $xml.find("Lat").text();
-            currentLat = parseFloat(Lat);
-            currentLat = (currentLat + 90) * (window.innerHeight / 180);
-            document.getElementById("text1").innerText = currentLat;
-            document.getElementById("text2").innerText = currentLon;
-            // check if it's the first iteration
-            if (firstIterFlag) {
-                ctx.beginPath();
-                ctx.arc(currentLon, currentLat, 4, 0, 2 * Math.PI);
-                ctx.lineWidth = 2;
-                ctx.lineStyle = 'blue';
-                ctx.fillStyle = 'red';
-                ctx.fill();
-                ctx.stroke();
-                //DrawCircle(ctx, currentLon, currentLat);
+        $.getScript('../../../Scripts/Draw.js', function () {
+            var canvas = document.getElementById("myCanvas");
+            var ctx = canvas.getContext("2d");
+            ctx.canvas.width = window.innerWidth;
+            ctx.canvas.height = window.innerHeight;
+            var IntervalTime =  1000 * @ViewBag.seconds;
+            var firstIterFlag = true;
+            var prevLon;
+            var prevLat;
+            myTimer = (function myTimer() {
+            $.post("@Url.Action("SaveValues")").done(function (xml) {
+                var reruenValues = drawCircleAndLine(prevLon, prevLat, firstIterFlag, ctx, xml);
+                prevLon = reruenValues.Lon;
+                prevLat = reruenValues.Lat;
                 firstIterFlag = false;
-            } else {
-                ctx.beginPath();
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = 'red';
-                ctx.moveTo(prevLon, prevLat);
-                ctx.lineTo(currentLon, currentLat);
-                ctx.stroke();
-            }
-            prevLat = currentLat;
-            prevLon = currentLon;
+                });
             });
+            interval = setInterval(myTimer, IntervalTime);
         });
-        setInterval(myTimer, IntervalTime);
-        myTimer();
     </script>
 </body>

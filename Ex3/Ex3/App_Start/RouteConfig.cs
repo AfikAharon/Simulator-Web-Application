@@ -18,7 +18,7 @@ namespace Ex3
             routes.MapRoute(
                 name: "default",
                 url: "{controller}/{action}",
-                defaults: new { controller = "Main", action = "Display" }
+                defaults: new { controller = "Main", action = "DefaultView" }
             );
 
             routes.MapRoute(

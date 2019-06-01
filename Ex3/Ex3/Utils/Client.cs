@@ -95,8 +95,11 @@ namespace Ex3.Utils
             byte[] bytesToRead = new byte[tcpClient.ReceiveBufferSize];
             int bytesRead = stream.Read(bytesToRead, 0, tcpClient.ReceiveBufferSize);
             string temp = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
+            if(temp == "")
+            {
+                // throw exception "there is issues with the received data
+            }
             double number = extractNumber(temp);
-            Console.WriteLine("Received : " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead));
             return number;
         }
 
@@ -120,12 +123,14 @@ namespace Ex3.Utils
         }
 
         public void Lock() {
+            // put try and catch 
             mut.WaitOne();
 
         }
 
         public void Unlock()
         {
+            // put try and catch
             mut.ReleaseMutex();
         }
     }

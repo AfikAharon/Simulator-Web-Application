@@ -13,6 +13,14 @@ namespace Ex3.Controllers
     public class MainController : Controller
     {
 
+
+        [HttpGet]
+        public ActionResult DefaultView()
+        {
+            return View("DefaultView");
+        }
+
+
         [HttpGet]
         public ActionResult Display(string ip, int port)
         {
@@ -49,7 +57,7 @@ namespace Ex3.Controllers
         public ActionResult SaveFlightDeatils(string ip, int port, int seconds, int timer, string fileName)
         {
             SampleFlightDeatils(ip, port, false);
-            InfoFlightModel infoFlightModel = InfoFlightModel.Instance;
+            InfoFileModel infoFlightModel = InfoFileModel.Instance;
             infoFlightModel.FileName = fileName;
             ViewBag.seconds = seconds;
             ViewBag.timer = timer;
@@ -63,7 +71,7 @@ namespace Ex3.Controllers
         {
             var infoFlightModel = InfoFlightModel.Instance;
             infoFlightModel.SampleValues(false);
-            infoFlightModel.SaveToFile();
+            InfoFileModel.Instance.SaveToFile();
             return ToXml(infoFlightModel);
         }
 
@@ -94,8 +102,6 @@ namespace Ex3.Controllers
 
             }
             return ToXml(infoFlightModel);
-            // change to XNL
-
         }
 
         public void SampleFlightDeatils(string ip, int port, bool disconnectFlag)

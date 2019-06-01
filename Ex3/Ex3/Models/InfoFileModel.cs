@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Threading;
+
 
 namespace Ex3.Models
 {
@@ -10,6 +12,9 @@ namespace Ex3.Models
         private int _counter;
         private int _size;
         private string[] _information;
+        private static Mutex mut;
+        private string _fileName;
+
 
 
         #region Singleton
@@ -21,6 +26,7 @@ namespace Ex3.Models
                 if (_infoFileModel == null)
                 {
                     _infoFileModel = new InfoFileModel();
+                    mut = new Mutex();
                 }
                 return _infoFileModel;
             }
@@ -31,6 +37,7 @@ namespace Ex3.Models
             _counter = 0;
             _information = null;
             _size = 0;
+            _fileName = null;
         }
 
         public int Counter
@@ -54,6 +61,17 @@ namespace Ex3.Models
             }
         }
 
+        public const string SCENARIO_FILE = "~/App_Data/{0}.txt";
+
+
+        public string FileName
+        {
+            get { return _fileName; }
+            set
+            {
+                _fileName = value;
+            }
+        }
 
         public void Read(string fileName)
         {
@@ -71,6 +89,22 @@ namespace Ex3.Models
             string retValue = Information[Counter];
             Counter++;
             return retValue;
+        }
+
+        public void SaveToFile()
+        {
+            if (FileName != null)
+            {
+                // put try and catch
+                mut.WaitOne();
+                string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, FileName));
+                InfoFlightModel flightModel = InfoFlightModel.Instance;
+                System.IO.StreamWriter file = new System.IO.StreamWriter(path, true);
+                file.WriteLine(flightModel.Lon.ToString() + "," + flightModel.Lat.ToString() + "," + flightModel.Throttle.ToString() + "," + flightModel.Rudder.ToString());
+                file.Close();
+                mut.ReleaseMutex();
+            }
+
         }
     }
 }
