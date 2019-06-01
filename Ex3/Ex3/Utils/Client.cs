@@ -9,7 +9,6 @@ using Ex3.Models;
 
 namespace Ex3.Utils
 {
-    //<img src="~/Map/export-map-share.png" style="position:absolute; width:100%;height:100%; top:0px; left:0px"/>
     class Client
     {
         private TcpClient tcpClient;
@@ -97,7 +96,7 @@ namespace Ex3.Utils
             string temp = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
             if(temp == "")
             {
-                // throw exception "there is issues with the received data
+                // throw exception "there is issues with the received data"
             }
             double number = extractNumber(temp);
             return number;
