@@ -18,7 +18,9 @@ namespace Ex3.Models
         private double _rudder;
 
 
-
+        /*
+         * Sets one Instance of InfoFlightModel
+         */
         #region Singleton
         private static InfoFlightModel _flightValues = null;
         public static InfoFlightModel Instance
@@ -44,48 +46,63 @@ namespace Ex3.Models
             _rudder = 0;
         }
 
+        /*
+         * Lat property, returns and sets the value
+         */
         public double Lat
         {
             get { return _Lat; }
             set { _Lat = value; }
         }
 
+        /*
+         * Lon property, returns and sets the value
+         */
         public double Lon
         {
             get { return _Lon; }
             set { _Lon = value; }
         }
 
+        /*
+         * Throttle property, returns and sets the value
+         */
         public double Throttle
         {
             get { return _throttle; }
             set { _throttle = value; }
         }
 
+        /*
+         * Rudder property, returns and sets the value
+         */
         public double Rudder
         {
             get { return _rudder; }
             set { _rudder = value; }
         }
 
+        /*
+         * ip property, returns and sets the value
+         */
         public string ip
         {
             get { return ip; }
             set { _ip = value; }
         }
 
+        /*
+         * Port property, returns and sets the value
+         */
         public int Port
         {
             get { return _Port; }
             set { _Port = value; }
         }
 
-
-
-
-
-
-
+        /*
+         * The function gets the values from the simulator
+         */
         public void SampleValues(bool disconnectFlag)
         {
 
@@ -104,6 +121,9 @@ namespace Ex3.Models
             }
         }
 
+        /*
+         * The function writes to XML file the values
+         */
         public void ToXml(XmlWriter writer)
         {
             writer.WriteStartElement("FlightValues");

@@ -19,7 +19,9 @@ namespace Ex3.Models
         private string _prev;
 
 
-
+        /*
+         * Sets one Instance of InfoFileModel
+         */ 
         #region Singleton
         private static InfoFileModel _infoFileModel = null;
         public static InfoFileModel Instance
@@ -35,6 +37,7 @@ namespace Ex3.Models
             }
         }
         #endregion
+        
         private InfoFileModel()
         {
             _counter = 0;
@@ -44,18 +47,27 @@ namespace Ex3.Models
             _prev = null;
         }
 
+        /*
+         * Counter property, returns and sets the value
+         */ 
         public int Counter
         {
             get { return _counter; }
             set { _counter = value; }
         }
 
+        /*
+         * Size property, returns and sets the value
+         */
         public int Size
         {
             get { return _size; }
             set { _size = value; }
         }
 
+        /*
+         * Information property, returns and sets the value
+         */
         public string[] Information
         {
             get { return _information; }
@@ -65,9 +77,17 @@ namespace Ex3.Models
             }
         }
 
-       
+        /*
+         * InformationLength property, returns length of _information
+         */
+        public int InformationLength
+        {
+            get { return _information.Length; }
+        }
 
-
+        /*
+         * FileName property, returns and sets the value
+         */
         public string FileName
         {
             get { return _fileName; }
@@ -77,12 +97,18 @@ namespace Ex3.Models
             }
         }
 
+        /*
+         * Prev property, returns and sets the value
+         */
         public string Prev
         {
             get { return _prev; }
             set { _prev = value; }
         }
 
+        /*
+         *The function reads all data of planes location to the array 
+         */
         public void Read()
         {
             string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, FileName));
@@ -90,35 +116,43 @@ namespace Ex3.Models
             Counter = 0;
         }
 
-
+        /*
+         * The function gets the location from the string array
+         */ 
         public string Get()
         {
             if (Counter > Size - 1)
-            {
-                if (Prev == null)
-                {
-                    //throw exception
-                }
+            {        
                 return Prev;
             }
             string retValue = Information[Counter];
-            _prev = retValue;
+            Prev = retValue;
             Counter++;
             return retValue;
         }
 
+        /*
+         * The function saves to file the samples
+         */ 
         public void SaveToFile()
         {
             if (FileName != null)
             {
-                // put try and catch
-                mut.WaitOne();
-                string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, FileName));
-                InfoFlightModel flightModel = InfoFlightModel.Instance;
-                System.IO.StreamWriter file = new System.IO.StreamWriter(path, true);
-                file.WriteLine(flightModel.Lon.ToString() + "," + flightModel.Lat.ToString() + "," + flightModel.Throttle.ToString() + "," + flightModel.Rudder.ToString());
-                file.Close();
-                mut.ReleaseMutex();
+                try
+                {
+                    // put try and catch
+                    mut.WaitOne();
+                    string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, FileName));
+                    InfoFlightModel flightModel = InfoFlightModel.Instance;
+                    System.IO.StreamWriter file = new System.IO.StreamWriter(path, true);
+                    file.WriteLine(flightModel.Lon.ToString() + "," + flightModel.Lat.ToString() + "," + flightModel.Throttle.ToString() + "," + flightModel.Rudder.ToString());
+                    file.Close();
+                    mut.ReleaseMutex();
+                } catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+
+                }
             }
 
         }

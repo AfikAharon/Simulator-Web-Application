@@ -13,14 +13,19 @@ namespace Ex3.Controllers
     public class MainController : Controller
     {
 
-
+        /*
+         * The default view that is generated at the start of application
+         */
         [HttpGet]
         public ActionResult DefaultView()
         {
             return View("DefaultView");
         }
 
-
+        /*
+         * The ActionResult directs to the "display" view which shows the planes current location on the map, 
+         * as it samples once from the simulator
+         */
         [HttpGet]
         public ActionResult Display(string ip, int port)
         {
@@ -37,6 +42,11 @@ namespace Ex3.Controllers
             return View();
         }
 
+        /*
+         * The ActionResults directs to the "displayLine" view, which samples the planes location each given
+         * number of seconds and shows its location on the map. also shows with a line the route which
+         * the plane flew through
+         */
         [HttpGet]
         public ActionResult DisplayLine(string ip, int port, int seconds)
         {
@@ -44,7 +54,9 @@ namespace Ex3.Controllers
             ViewBag.seconds = seconds;
             return View("displayLine");
         }
-        // Interval function for cshtml DisplayLine
+        /*
+         * The function gets the plane values from the simulator to the infoFlightModel instance
+         */ 
         [HttpPost]
         public string GetValues()
         {
@@ -53,6 +65,10 @@ namespace Ex3.Controllers
             return ToXml(infoFlightModel);
         }
 
+        /*
+         * The ActionResults directs to the "SaveFlightDetails" view, which samples the plane location each 
+         * number of seconds, for a period of time (timer), and saves the route of the flight. also displays the plane
+         */ 
         [HttpGet]
         public ActionResult SaveFlightDeatils(string ip, int port, int seconds, int timer, string fileName)
         {
@@ -65,7 +81,9 @@ namespace Ex3.Controllers
         }
         
 
-        // Interval function for cshtml SaveFlightDeatils
+        /*
+         * The function saves to file the samples of plane location
+         */ 
         [HttpPost]
         public string SaveValues()
         {
@@ -75,17 +93,26 @@ namespace Ex3.Controllers
             return ToXml(infoFlightModel);
         }
 
+        /*
+         * The ActionResults directs to "FlightDetailsFile" view, which displays the plane route on the map
+         * given his coordinates from given file name, each given number of seconds
+         */
         [HttpGet]
         public ActionResult DisplayFromFile(string FileName, int seconds)
         {
             var infoFileModel = InfoFileModel.Instance;
             infoFileModel.FileName = FileName;
             infoFileModel.Read();
+            infoFileModel.Size = infoFileModel.InformationLength;
             ViewBag.seconds = seconds;
+            ViewBag.numSamples = infoFileModel.Size;
             return View("FlightDetailsFile");
             
         }
 
+        /*
+         * The function gets the values of the plane from a given file and returns xml string
+         */ 
         [HttpPost]
         public string GetValuesFromFile()
         {
@@ -105,6 +132,9 @@ namespace Ex3.Controllers
             return ToXml(infoFlightModel);
         }
 
+        /*
+         * The function samples the flight details from the simulator
+         */ 
         public void SampleFlightDeatils(string ip, int port, bool disconnectFlag)
         {
             var infoFlightModel = InfoFlightModel.Instance;
@@ -115,7 +145,9 @@ namespace Ex3.Controllers
             ViewBag.Lon = infoFlightModel.Lon;
         }
 
-
+        /*
+         * The function turns the flight samples to xml
+         */ 
         private string ToXml(InfoFlightModel flightValues)
         {
             //Initiate XML stuff

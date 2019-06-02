@@ -39,3 +39,33 @@ function drawCircleAndLine(prevLon, prevLat, firstIterFlag, ctx, xml) {
     drawLine(ctx, prevLon, prevLat, lon, lat);
     return {Lon: lon, Lat:lat}
 }
+
+function drawCircleAndLineFile(prevLon, prevLat, firstIterFlag, ctx, xml) {
+    if (firstIterFlag) {
+        drawCircle(ctx, prevLon, prevLat);
+        return { Lon: prevLon, Lat : prevLat}
+    } else {
+        var lon = getLonFromXml(xml);
+        var lat = getLatFromXml(xml);
+        tempLon = (lon + 180) * (window.innerWidth / 360);
+        tempLat = (lat + 90) * (window.innerHeight / 180);
+        drawLine(ctx, prevLon, prevLat, tempLon, tempLat);
+        return {Lon: tempLon, Lat: tempLat}
+    }
+}
+
+function getLonFromXml(xml) {
+    var xmlDoc = $.parseXML(xml),
+    $xml = $(xmlDoc),
+    xmlLon = $xml.find("Lon").text();
+    var tempLon = parseFloat(xmlLon);
+    return tempLon;
+}
+
+function getLatFromXml(xml) {
+    var xmlDoc = $.parseXML(xml),
+    $xml = $(xmlDoc),
+    xmlLat = $xml.find("Lat").text();
+    var tempLat = parseFloat(xmlLat);
+    return tempLat;
+}

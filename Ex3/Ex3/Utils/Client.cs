@@ -58,7 +58,9 @@ namespace Ex3.Utils
             set { this._currentThread = value; }
         }
 
-
+        /*
+         * The function operation is setting new TcpClient and connecting
+         */ 
         public void connect(string ip, int port)
         {
             tcpClient = new TcpClient();
@@ -71,7 +73,7 @@ namespace Ex3.Utils
         }
 
         /*
-         * The function reads the commans given to him and then writes them, then sleeps for 2 seconds
+         * The function gets the information from simulator given the request string
          */
         public double request(string reqComm)
         {
@@ -88,6 +90,10 @@ namespace Ex3.Utils
             return returnValue;
         }
 
+        /*
+         * The function reads from the given strean the values, and  uses the extractNumber to get the actual
+         * value without the string
+         */ 
         public double readFromServer(NetworkStream stream)
         {
 
@@ -96,12 +102,15 @@ namespace Ex3.Utils
             string temp = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
             if(temp == "")
             {
-                // throw exception "there is issues with the received data"
+                throw new Exception("No data could be read");
             }
             double number = extractNumber(temp);
             return number;
         }
 
+        /*
+         * The function extracts the desried number from the string and converts to double
+         */ 
         public double extractNumber(string givenString)
         {
             int len = givenString.Length;
@@ -121,16 +130,33 @@ namespace Ex3.Utils
             return result;
         }
 
+        /*
+         * Locks the mutex
+         */ 
         public void Lock() {
             // put try and catch 
-            mut.WaitOne();
-
+            try
+            {
+                mut.WaitOne();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
+        /*
+         * Unblocks the mutex
+         */ 
         public void Unlock()
         {
-            // put try and catch
-            mut.ReleaseMutex();
+            try
+            {
+                mut.ReleaseMutex();
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
