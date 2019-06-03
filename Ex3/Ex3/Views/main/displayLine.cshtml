@@ -19,22 +19,11 @@
         top: 0;
         left: 0;
     }
-</style>
-<head>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-</head>
-<div id="div1">
-
-</div>
-<div id="div2">
-</div>
+</style> 
 <body>
     <canvas id="myCanvas"></canvas>
-
     <script>
-        $.getScript('../../../Scripts/Draw.js', function () {
             var canvas = document.getElementById("myCanvas");
-            var counter = 20;
             var ctx = canvas.getContext("2d");
             ctx.canvas.width = window.innerWidth;
             ctx.canvas.height = window.innerHeight;
@@ -45,15 +34,10 @@
             myTimer = (function myTimer() {
             $.post("@Url.Action("GetValues")").done(function (xml) {
                 reruenValues = drawCircleAndLine(prevLon, prevLat, false, ctx, xml);
-                prevLon = reruenValues.Lon + counter;
-                prevLat = reruenValues.Lat + counter;
-                counter += 20;
-                document.getElementById('div1').innerText = prevLon;
-                document.getElementById('div2').innerText = prevLat;
-
+                prevLon = reruenValues.Lon
+                prevLat = reruenValues.Lat
                 });
             });
             interval = setInterval(myTimer, IntervalTime);
-        });
     </script>
 </body>

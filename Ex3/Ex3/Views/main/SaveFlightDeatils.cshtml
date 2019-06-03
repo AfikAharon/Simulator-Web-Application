@@ -22,13 +22,9 @@
         left: 0;
     }
 </style>
-<head>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-</head>
 <body>
     <canvas id="myCanvas"></canvas>
     <script>
-        $.getScript('../../../../../Scripts/Draw.js', function () {
             var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
             ctx.canvas.width = window.innerWidth;
@@ -49,6 +45,5 @@
                 clearInterval(interval);
             };
             setTimeout(stopInterval, @ViewBag.timer * 1000)
-        });
     </script>
 </body>

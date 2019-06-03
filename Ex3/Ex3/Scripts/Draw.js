@@ -24,13 +24,10 @@ function drawCircleAndLine(prevLon, prevLat, firstIterFlag, ctx, xml) {
         drawCircle(ctx, lon, lat);
         return { Lon: lon, Lat: lat }
     }
-    var xmlDoc = $.parseXML(xml),
-    $xml = $(xmlDoc),
-    xmlLon = $xml.find("Lon").text();
-    var lon = parseFloat(xmlLon);
+
+    var lon = getLonFromXml(xml);
     lon = (lon + 180) * (window.innerWidth / 360);
-    xmlLat = $xml.find("Lat").text();
-    var lat = parseFloat(xmlLat);
+    var lat = getLatFromXml(xml);
     lat = (lat + 90) * (window.innerHeight / 180);
     // check if it's the first iteration
     if (firstIterFlag) {
