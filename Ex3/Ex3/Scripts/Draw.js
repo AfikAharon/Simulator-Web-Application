@@ -24,31 +24,12 @@ function drawCircleAndLine(prevLon, prevLat, firstIterFlag, ctx, xml) {
         drawCircle(ctx, lon, lat);
         return { Lon: lon, Lat: lat }
     }
-
     var lon = getLonFromXml(xml);
     lon = (lon + 180) * (window.innerWidth / 360);
     var lat = getLatFromXml(xml);
     lat = (lat + 90) * (window.innerHeight / 180);
-    // check if it's the first iteration
-    if (firstIterFlag) {
-        drawCircle(ctx, lon, lat);
-    }
     drawLine(ctx, prevLon, prevLat, lon, lat);
     return {Lon: lon, Lat:lat}
-}
-
-function drawCircleAndLineFile(prevLon, prevLat, firstIterFlag, ctx, xml) {
-    if (firstIterFlag) {
-        drawCircle(ctx, prevLon, prevLat);
-        return { Lon: prevLon, Lat : prevLat}
-    } else {
-        var lon = getLonFromXml(xml);
-        var lat = getLatFromXml(xml);
-        tempLon = (lon + 180) * (window.innerWidth / 360);
-        tempLat = (lat + 90) * (window.innerHeight / 180);
-        drawLine(ctx, prevLon, prevLat, tempLon, tempLat);
-        return {Lon: tempLon, Lat: tempLat}
-    }
 }
 
 function getLonFromXml(xml) {

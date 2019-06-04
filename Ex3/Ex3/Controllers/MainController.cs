@@ -103,11 +103,19 @@ namespace Ex3.Controllers
             var infoFileModel = InfoFileModel.Instance;
             infoFileModel.FileName = FileName;
             infoFileModel.Read();
-            infoFileModel.Size = infoFileModel.InformationLength;
+            InfoFlightModel infoFlightModel = InfoFlightModel.Instance;
+            string values = infoFileModel.Get();
+            if (values != null)
+            {
+                infoFlightModel.CastValues(values);
+
+            }
+            
+            ViewBag.Lon = infoFlightModel.Lon;
+            ViewBag.Lat = infoFlightModel.Lat;
             ViewBag.seconds = seconds;
             ViewBag.numSamples = infoFileModel.Size;
             return View("FlightDetailsFile");
-            
         }
 
         /*
@@ -118,15 +126,10 @@ namespace Ex3.Controllers
         {
             var infoFileModel = InfoFileModel.Instance;
             InfoFlightModel infoFlightModel = InfoFlightModel.Instance;
-            string[] splitFlightDeatils;
             string values = infoFileModel.Get();
             if (values != null)
             {
-                splitFlightDeatils = values.Split(',');
-                infoFlightModel.Lon = Convert.ToDouble(splitFlightDeatils[0]);
-                infoFlightModel.Lat = Convert.ToDouble(splitFlightDeatils[1]);
-                infoFlightModel.Throttle = Convert.ToDouble(splitFlightDeatils[2]);
-                infoFlightModel.Rudder = Convert.ToDouble(splitFlightDeatils[3]);
+                infoFlightModel.CastValues(values);
 
             }
             return ToXml(infoFlightModel);
@@ -154,12 +157,9 @@ namespace Ex3.Controllers
             StringBuilder sb = new StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings();
             XmlWriter writer = XmlWriter.Create(sb, settings);
-
             writer.WriteStartDocument();
             writer.WriteStartElement("Values");
-
             flightValues.ToXml(writer);
-
             writer.WriteEndElement();
             writer.WriteEndDocument();
             writer.Flush();

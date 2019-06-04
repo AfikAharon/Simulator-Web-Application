@@ -133,5 +133,15 @@ namespace Ex3.Models
             writer.WriteElementString("Throttle", this._throttle.ToString());
             writer.WriteEndElement();
         }
+
+        /*The function split the given string,cast the splits values to double in insert to the property*/
+        public void CastValues(string values)
+        {
+            string[] splitFlightDeatils = values.Split(',');
+            Lon = Convert.ToDouble(splitFlightDeatils[0]);
+            Lat = Convert.ToDouble(splitFlightDeatils[1]);
+            Throttle = Convert.ToDouble(splitFlightDeatils[2]);
+            Rudder = Convert.ToDouble(splitFlightDeatils[3]);
+        }
     }
 }

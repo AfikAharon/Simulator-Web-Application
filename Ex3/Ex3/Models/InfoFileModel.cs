@@ -114,6 +114,7 @@ namespace Ex3.Models
             string path = HttpContext.Current.Server.MapPath(String.Format(SCENARIO_FILE, FileName));
             _information = System.IO.File.ReadAllLines(path);
             Counter = 0;
+            Size = _information.Length;
         }
 
         /*
